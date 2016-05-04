@@ -1,11 +1,42 @@
-#calories{
-	margin-left: 2em;
+#calories {
+    margin-left: 2em;
 }
 
-#serving{
-	margin-left: 2em;
+#serving {
+    margin-left: 2em;
 }
 
-#brand-name{
-	margin-left: 0.5em;
+.serving-size {}
+
+.serving-unit {}
+
+#brand-name {
+    margin-left: 0.5em;
+}
+
+#edit-icon {
+    visibility: hidden;
+    font-size: 1em;
+}
+
+td:hover #edit-icon {
+    visibility: visible;
+}
+
+#remove-icon {
+    visibility: hidden;
+    font-size: 1em;
+}
+
+#remove:hover #remove-icon {
+    visibility: visible;
+}
+
+.table-header {
+    margin-left: 1em;
+    padding: 1em;
+}
+
+#total-section {
+    margin-top: 2em;
 }

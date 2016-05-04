@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <title>Shamwow's Health Tracker</title>
-    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
@@ -17,24 +16,56 @@
         <table id="search-list">
         </table>
     </section>
-
     <section id="log-section">
         <h3 id="log-title">Daily Log</h3>
         <table id="log-list">
+            <th class="table-header">Name</th>
+            <th class="table-header">Calories</th>
+            <th class="table-header">Serving Size</th>
         </table>
     </section>
-
+    <section id="total-section">
+        <div id="total-calories">
+            Total Calories Consumed Today: <span></span>
+        </div>
+    </section>
     <script type="text/template" id="result-tmpl">
         <tr class="result-item">
-        <td><%= name %><span id="brand-name">(<%= brandName %>)</span></td>
-        <td><span id="calories"><%= calories %></span> calories</td>
-        <td><span id="serving"><%= serving %></span></td>
-        <td><button data-id="<%= id %>">Log</button></td>
+            <td class="col-sm-3">
+                <%= name %><span id="brand-name">(<%= brandName %>)</span></td>
+            <td class="col-sm-3"><span id="calories" class="col-sm-12"><%= totalCalories %> calories</span></td>
+            <td class="col-sm-2"><span data-id="<%= cid %>" class="serving-size"><%= servingSize %></span>
+                <a href="#" id="edit-icon">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            </td>
+            <td><span class="serving-unit"><%= servingUnit %></span></td>
+            <td>
+                <button data-id="<%= cid %>">Log</button>
+            </td>
+        </tr>
+    </script>
+    <script type="text/template" id="log-tmpl">
+        <tr class="log-item">
+            <td>
+                <%= name %><span id="brand-name">(<%= brandName %>)</span></td>
+            <td><span id="calories"><%= totalCalories %></span> calories</td>
+            <td><span class="serving-size"><%= servingSize %></span>
+            </td>
+            <td><span class="serving-unit"><%= servingUnit %></span></td>
+            <td id="remove">
+                <a href="#" data-id="<%= cid %>" id="remove-icon">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </td>
         </tr>
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/style.css">
     <script src="js/app.js"></script>
 </body>
 
