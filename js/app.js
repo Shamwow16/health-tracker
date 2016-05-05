@@ -1,10 +1,66 @@
 $(function() {
 
+    var CalorieGoalModel = Backbone.Model.extend({
+        defaults: {
+            goal: 0
+        }
+    });
+
+    var CalorieGoals = Backbone.Collection.extend({
+        model: CalorieGoalModel
+    });
+
+    var chart;
+    var CalorieGoalView = Backbone.View.extend({
+        el: 'body',
+        events: {
+            'click #goal-save': 'setGoal'
+        },
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+            chart = new CanvasJS.Chart("chart-container", {
+                title: {
+                    text: "Calories"
+                },
+                animationEnabled: true,
+                data: [{
+                    type: "doughnut",
+                    startAngle: 20,
+                    toolTipContent: "{label}: {y}",
+                    indexLabel: "{label}",
+                    dataPoints: [
+
+                        { y: 2000, label: "Calories left" },
+                        { y: 0 }
+
+                    ]
+                }]
+            });
+
+        },
+        render: function() {
+            var self = this;
+            self.$('#goal-status').css('visibility', 'visible');
+            self.$('#goal-status').html('You have consumed ' + logList.calorieCount + ' calories out of ' + self.model.get('goal') + ' calories');
+
+
+            chart.options.data[0].dataPoints[0].y = self.model.get('goal') - logList.calorieCount;
+            chart.render();
+        },
+        setGoal: function() {
+            var self = this;
+            var goal = self.$('input').val();
+            self.model.set('goal', goal);
+        }
+    });
+
+
     var SearchBarModel = Backbone.Model.extend({
         defaults: {
             query: ''
         }
     });
+
 
     var SearchResult = Backbone.Model.extend({
         defaults: {
@@ -47,13 +103,6 @@ $(function() {
     var LoggedList = Backbone.Collection.extend({
         model: LoggedItem,
         calorieCount: 0
-            /*addCalories: function() {
-    var self = this;
-    var log = self.at(self.length - 1);
-    self.calorieCount += log.get('totalCalories');
-    return self.calorieCount;
-}
-*/
     });
 
     var LoggedListView = Backbone.View.extend({
@@ -85,7 +134,6 @@ $(function() {
             var id = $(e.currentTarget).data("id");
             var item = this.collection.get(id);
             this.collection.remove(item);
-            console.log(element);
         }
     });
 
@@ -104,6 +152,8 @@ $(function() {
                 self.collection.calorieCount += log.get('totalCalories');
             });
             self.$('span').html(self.collection.calorieCount);
+            chart.options.data[0].dataPoints[1] = { y: logList.calorieCount, label: "Calories Consumed" };
+            calorieGoal.render();
         }
     });
 
@@ -118,8 +168,6 @@ $(function() {
         template: _.template($('#result-tmpl').html()),
         initialize: function(options) {
             var self = this;
-
-            /*self.$el.html('');*/
             self.listenTo(searchResults, 'change', self.render);
 
         },
@@ -129,8 +177,6 @@ $(function() {
             var element = $(e.currentTarget).siblings();
             element.attr('contentEditable', true);
             element.focus();
-
-            console.log(element.html());
         },
         updateCalories: function(e) {
             e.preventDefault();
@@ -144,7 +190,6 @@ $(function() {
             $(self.el).html('');
             var resultCollection = this.collection;
             resultCollection.each(function(result) {
-                console.log(result);
                 $(self.el).append(self.template(result.toJSON()));
             });
             return this;
@@ -162,6 +207,8 @@ $(function() {
 
     })
 
+    var goal = new CalorieGoalModel();
+    var calorieGoal = new CalorieGoalView({ model: goal });
     var searchResults = new SearchResultList();
     var logList = new LoggedList();
     var logView = new LoggedListView({ collection: logList });
@@ -177,10 +224,6 @@ $(function() {
         initialize: function() {
             var self = this;
         },
-
-        /*render:function(){
-            console.log("hello");
-        },*/
 
         performSearch: function() {
             this.model.set('query', this.$el.val());

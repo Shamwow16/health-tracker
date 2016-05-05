@@ -2,6 +2,10 @@
     margin-left: 2em;
 }
 
+#goal-status {
+    visibility: hidden;
+}
+
 #serving {
     margin-left: 2em;
 }
