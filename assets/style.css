@@ -1,9 +1,37 @@
-#calories {
-    margin-left: 2em;
+body {
+    background-color: #2B2B2B;
+    color: #F6F6F6;
+    font-family: 'Lato', sans-serif;
+}
+
+input {
+    color: #2B2B2B;
+}
+
+button {
+    color: #2B2B2B;
+}
+
+th {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#brand-name {
+    font-style: italic;
 }
 
 #goal-status {
     visibility: hidden;
+}
+
+#search-list {
+    margin-left: 1em !important;
+}
+
+#search-list tr {
+    background: #5E5E5E;
+    color: #F6F6F6;
 }
 
 #serving {
@@ -12,7 +40,9 @@
 
 .serving-size {}
 
-.serving-unit {}
+.serving-unit {
+    margin-left: 0.1em;
+}
 
 #brand-name {
     margin-left: 0.5em;
@@ -32,15 +62,30 @@ td:hover #edit-icon {
     font-size: 1em;
 }
 
-#remove:hover #remove-icon {
+.log-item:hover #remove-icon {
     visibility: visible;
 }
 
-.table-header {
+#log-title {
+    margin-bottom: 2em;
+    font-size: 3em;
+}
+
+
+/* .table-header {
     margin-left: 1em;
     padding: 1em;
+} */
+
+#log-list {
+    margin-left: 1em;
+    font-size: 1em;
 }
 
 #total-section {
     margin-top: 2em;
+}
+
+.result-item td {
+    padding: 1em;
 }

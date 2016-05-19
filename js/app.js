@@ -1,13 +1,25 @@
 $(function() {
 
-    var CalorieGoalModel = Backbone.Model.extend({
+    /*    var Todo = Backbone.Model.extend({
+            defaults: { title: "New Todo" }
+        });
+        // Create a Firebase.Collection and set the 'firebase' property
+        // to the URL of our database
+        var TodoCollection = Backbone.Firebase.Collection.extend({
+            model: Todo,
+            url: "https://burning-inferno-5919.firebaseio.com"
+        });
+    */
+    var CalorieGoalModel = Backbone.Firebase.Model.extend({
         defaults: {
             goal: 0
-        }
+        },
+        url: "https://burning-inferno-5919.firebaseio.com"
     });
 
-    var CalorieGoals = Backbone.Collection.extend({
-        model: CalorieGoalModel
+    var CalorieGoals = Backbone.Firebase.Collection.extend({
+        model: CalorieGoalModel,
+        /*url: "https://burning-inferno-5919.firebaseio.com"*/
     });
 
     var chart;
@@ -18,10 +30,12 @@ $(function() {
         },
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
+            var goal = this.model.get('goal');
             chart = new CanvasJS.Chart("chart-container", {
-                title: {
-                    text: "Calories"
-                },
+                // title: {
+                //     text: "Calories"
+                // },
+                backgroundColor: null,
                 animationEnabled: true,
                 data: [{
                     type: "doughnut",
@@ -30,7 +44,7 @@ $(function() {
                     indexLabel: "{label}",
                     dataPoints: [
 
-                        { y: 2000, label: "Calories left" },
+                        { y: goal, label: "Calories left" },
                         { y: 0 }
 
                     ]
@@ -40,17 +54,36 @@ $(function() {
         },
         render: function() {
             var self = this;
+            var goal = parseInt(self.model.get('goal'));
+            self.$('#chart-container').css('visibility', 'visible');
             self.$('#goal-status').css('visibility', 'visible');
-            self.$('#goal-status').html('You have consumed ' + logList.calorieCount + ' calories out of ' + self.model.get('goal') + ' calories');
 
+            if (logList.calorieCount < goal) {
+                self.$('#goal-status').html('You have consumed ' + logList.calorieCount + ' calories out of ' + goal + ' calories');
+            } else {
 
-            chart.options.data[0].dataPoints[0].y = self.model.get('goal') - logList.calorieCount;
+                if (logList.calorieCount >= self.model.get('goal') && logList.calorieCount < (goal + 80)) {
+                    self.$('#goal-status').html('You have reached your goal for today!');
+                } else {
+                    self.$('#goal-status').html('You have exceeded your goal for the day by ' + (logList.calorieCount - goal) + ' calories');
+                    self.$('#chart-container').css('visibility', 'hidden');
+                    chart.render();
+
+                    return true;
+                }
+
+            }
+
+            chart.options.data[0].dataPoints[0].y = goal - logList.calorieCount;
             chart.render();
         },
         setGoal: function() {
             var self = this;
             var goal = self.$('input').val();
             self.model.set('goal', goal);
+            self.$('#goal-input').html(goal);
+            /* self.collection.create({ id: 0, key: goal });
+             */
         }
     });
 
@@ -100,9 +133,10 @@ $(function() {
         }
     });
 
-    var LoggedList = Backbone.Collection.extend({
+    var LoggedList = Backbone.Firebase.Collection.extend({
         model: LoggedItem,
-        calorieCount: 0
+        calorieCount: 0,
+        url: "https://burning-inferno-5919.firebaseio.com"
     });
 
     var LoggedListView = Backbone.View.extend({
@@ -197,10 +231,22 @@ $(function() {
 
         addItem: function(e) {
             e.preventDefault();
+            if (goal.get('goal') == '') {
+                alert('Please set your calorie intake goal first!');
+                return false;
+            }
             var id = $(e.currentTarget).data("id");
             var item = this.collection.get(id);
             var loggedItem = new LoggedItem({ name: item.get('name'), brandName: item.get('brandName'), baseCalories: item.get('baseCalories'), totalCalories: item.get('totalCalories'), servingSize: item.get('servingSize'), servingUnit: item.get('servingUnit'), logTime: Date.now() });
-            logList.add(loggedItem);
+            logList.create({
+                name: loggedItem.get('name'),
+                brandName: loggedItem.get('brandName'),
+                baseCalories: loggedItem.get('baseCalories'),
+                totalCalories: loggedItem.get('totalCalories'),
+                servingSize: loggedItem.get('servingSize'),
+                servingUnit: loggedItem.get('servingUnit'),
+                logTime: loggedItem.get('logTime')
+            });
         }
 
 
