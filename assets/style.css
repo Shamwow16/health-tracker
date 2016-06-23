@@ -26,11 +26,20 @@ th {
 }
 
 #search-list {
+    position: absolute;
+    left: 30px;
     margin-left: 1em !important;
+    z-index: 10;
+}
+
+#search-section {
+    margin-left: 2em;
+    font-size: 1.5em;
 }
 
 #search-list tr {
-    background: #5E5E5E;
+    font-size: 1em;
+    background: #222;
     color: #F6F6F6;
 }
 
@@ -62,6 +71,10 @@ td:hover #edit-icon {
     font-size: 1em;
 }
 
+.log-item {
+    font-size: 1.2em;
+}
+
 .log-item:hover #remove-icon {
     visibility: visible;
 }
@@ -69,6 +82,10 @@ td:hover #edit-icon {
 #log-title {
     margin-bottom: 2em;
     font-size: 3em;
+}
+
+#log-section {
+    margin-top: 20em;
 }
 
 
@@ -88,4 +105,10 @@ td:hover #edit-icon {
 
 .result-item td {
     padding: 1em;
+}
+
+@media only screen and (max-width: 500px) {
+    #search-list {
+        font-size: 0.8em;
+    }
 }

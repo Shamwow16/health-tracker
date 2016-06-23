@@ -9,48 +9,43 @@
 </head>
 
 <body>
-    <div class="row">
-        <section class="col-xs-6" id="app-title">
-            <h1 id="main-title">One Awesome Health Tracker</h1>
-        </section>
-        <div class="container">
-            <section class="col-xs-6 text-right" id="goal-section">
-                <div class="row">
-                    <h2 id="goal-title">Enter your calorie intake goal</h2>
-                </div>
-                <div class="row">
-                    <input id="goal-input" type="text"></input>
-                    <button id="goal-save">Save</button>
-                </div>
-            </section>
-        </div>
-    </div>
-    <section id="search-section">
-        <div class="row">
-            <div class="col-xs-6 text-left">
-                <label for="search-box">Search for what you consumed </label>
-                <input class="searchbox" id="search-box" placeholder="What did you eat or drink?"></input>
-            </div>
-            <h3 class="col-xs-6 text-right" id="goal-status"></h3>
-        </div>
-        <div class="row">
-            <table class="col-xs-5 pull-left" id="search-list">
-            </table>
-            <div class=" text-right col-xs-offset 4 col-xs-4 pull-right " id="chart-container" style="height: 300px"></div>
-        </div>
+    <section class="col-xs-12 text-center" id="app-title">
+        <h1 id="main-title">Shamwow's Health Tracker</h1>
     </section>
-    <section id="log-section">
-        <h3 id="log-title" class="text-center">Daily Log</h3>
-        <div class="row text-center">
-            <div class="col-xs-12 text-center">
-                <table class="col-xs-12 text-center" id="log-list">
-                    <th class="col-xs-2 table-header">Name</th>
-                    <th class="col-xs-2 table-header">Calories</th>
-                    <th class="col-xs-2 table-header">Serving Size</th>
+    <section class="col-xs-12 text-right" id="goal-section">
+        <div>
+            <h2 id="goal-title">Enter your calorie intake goal</h2>
+        </div>
+        <input id="goal-input" type="text"></input>
+        <button id="goal-save">Save</button>
+    </section>
+    <div class="col-sm-12">
+        <section id="search-section">
+            <div class="row">
+                <div class="col-xs-6 text-left">
+                    <label for="search-box">Search for what you consumed </label>
+                    <input class="searchbox" id="search-box" placeholder="What did you eat or drink?"></input>
+                </div>
+                <h3 class="col-xs-6 text-right" id="goal-status"></h3>
+            </div>
+            <div class="row">
+                <table class="col-xs-5 pull-left" id="search-list">
                 </table>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+    <div class="col-sm-12">
+        <section id="log-section">
+            <h3 id="log-title" class="text-center">Daily Log</h3>
+            <div>
+                <table class="col-xs-12 text-center" id="log-list">
+                    <th class="col-xs-2">Name</th>
+                    <th class="col-xs-2">Calories</th>
+                    <th class="col-xs-2">Serving Size</th>
+                </table>
+            </div>
+        </section>
+    </div>
     <section id="total-section">
         <div class="row" id="total-calories">
             <div class="container text-center">
@@ -84,12 +79,6 @@
             <td class="col-xs-2"><span id="calories"><%= totalCalories %></span> calories</td>
             <td class="col-xs-2 "><span class="serving-size"><%= servingSize %> <span class="serving-unit"> <%= servingUnit %></span></span>
             </td>
-            <!-- <td><span class="serving-unit"></span></td> -->
-            <!--  <td class="col-xs-2" id="remove">
-               <a href="#" data-id="<%= cid %>" id="remove-icon">
-                   <span class="glyphicon glyphicon-remove"></span>
-               </a>
-           </td> -->
         </tr>
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -100,6 +89,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <link rel="stylesheet" href="assets/style.css">
     <script src="js/app.js"></script>
 </body>
