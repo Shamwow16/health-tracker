@@ -21,11 +21,15 @@ $(function() {
     var CalorieGoalView = Backbone.View.extend({
         el: 'body',
         events: {
-            'click #goal-save': 'setGoal'
+            'click #goal-save': 'setGoal',
+            'click #goal-update': 'updateGoal'
         },
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             var goal = this.model.get('goal');
+            self.$('#goal-input').prop('readonly', true);
+            /*self.$('#goal-input').val(goal);
+             */
 
         },
         render: function() {
@@ -33,7 +37,7 @@ $(function() {
             var goal = parseInt(self.model.get('goal'));
 
             self.$('#goal-status').css('visibility', 'visible');
-
+            self.$('#goal-input').val(goal);
             if (logList.calorieCount < goal) {
                 self.$('#goal-status').html('You have consumed ' + logList.calorieCount + ' calories out of ' + goal + ' calories');
             } else {
@@ -54,9 +58,23 @@ $(function() {
         },
         setGoal: function() {
             var self = this;
-            var goal = self.$('input').val();
+            var goal = Math.round(self.$('input').val());
             self.model.set('goal', goal);
-            self.$('#goal-input').html(goal);
+            self.$('#goal-input').prop('readonly', true);
+            self.$('#goal-save').css('display', 'none');
+            self.$('#goal-update').css('display', 'inline-block');
+
+        },
+
+        updateGoal: function() {
+            var self = this;
+            /* var goal = Math.round(self.$('input').val());
+             */
+            self.$('#goal-input').val('');
+            self.$('#goal-input').prop('readonly', false);
+            self.$('#goal-input').focus();
+            self.$('#goal-update').css('display', 'none');
+            self.$('#goal-save').css('display', 'inline-block');
         }
     });
 
@@ -137,9 +155,9 @@ $(function() {
     var SearchResultListView = Backbone.View.extend({
         el: $('#search-list'),
         events: {
-            'click button': 'addItem',
+            'click .log-btn': 'addItem',
             'mousedown #edit-icon': 'edit',
-            'keyup .serving-size': 'updateCalories'
+            'click .serving-save-btn': 'updateCalories'
         },
         template: _.template($('#result-tmpl').html()),
         initialize: function(options) {
@@ -151,15 +169,18 @@ $(function() {
         edit: function(e) {
             e.preventDefault();
             var element = $(e.currentTarget).siblings();
-            element.attr('contentEditable', true);
-            element.focus();
+            $(element[1]).css('visibility', 'visible');
+            element.addClass('serving-size-input');
+            $(element[0]).attr('contentEditable', true);
+            $(element[0]).focus();
+
         },
         updateCalories: function(e) {
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
             var item = this.collection.get(id);
-            item.set('servingSize', $(e.currentTarget).html());
-            item.set('totalCalories', ($(e.currentTarget).html() * item.get('baseCalories')));
+            item.set('servingSize', $(e.currentTarget).siblings()[0].innerHTML);
+            item.set('totalCalories', $(e.currentTarget).siblings()[0].innerHTML * item.get('baseCalories'));
         },
         render: function() {
             var self = this;
@@ -176,6 +197,10 @@ $(function() {
             if (goal.get('goal') == '') {
                 alert('Please set your calorie intake goal first!');
                 return false;
+            }
+            var emptyLogMessage = $('#empty-log');
+            if (emptyLogMessage) {
+
             }
             var id = $(e.currentTarget).data("id");
             var item = this.collection.get(id);
@@ -199,7 +224,7 @@ $(function() {
 
 
     var totalsView = Backbone.View.extend({
-        el: $('#total-calories'),
+        el: $('#total-section'),
         initialize: function() {
             var self = this;
             self.listenTo(self.collection, 'add', self.addUpCalories);
@@ -211,8 +236,15 @@ $(function() {
             self.collection.calorieCount = 0;
             self.collection.each(function(log) {
                 self.collection.calorieCount += log.get('totalCalories');
+                self.collection.calorieCount = Math.round(self.collection.calorieCount);
             });
-            self.$('span').html(self.collection.calorieCount);
+            if (self.collection.calorieCount != 0) {
+                $(self.el).find('#empty-log').css('visibility', 'hidden');
+            } else {
+                $(self.el).find('#empty-log').css('visibility', 'visible');
+            }
+
+            self.$('span').html(Math.round(self.collection.calorieCount));
             calorieGoal.render();
         }
     });
@@ -295,4 +327,24 @@ $(function() {
 
 
     var searchBar = new SearchBarView({ model: searchQuery });
+    $("#search-list").click(function(e) {
+        e.stopPropagation();
+    });
+
+    $(document).click(function(e) {
+
+        if (e.target.id != "search-box") {
+            $("#search-list").hide();
+            /* searchResults.reset();
+ $("#search-box").val('');
+*/
+        } else {
+            $("#search-list").show();
+        }
+    });
+
+
+    /* Clicks within the dropdown won't make
+       it past the dropdown itself */
+
 });
